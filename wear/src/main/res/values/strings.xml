@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Minions</string>
+    <string name="digital_name">Minions Digital</string>
+    <string name="analog_name">Minions Analog</string>
+    <string name="title_activity_setting">SettingActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+</resources>
