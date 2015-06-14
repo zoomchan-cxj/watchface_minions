@@ -512,8 +512,6 @@ public class DigitalWatchface extends CanvasWatchFaceService implements MessageA
             super.onAmbientModeChanged(inAmbientMode);
             invalidate();
 
-            // Whether the timer should be running depends on whether we're in ambient mode (as well
-            // as whether we're visible), so we may need to start or stop the timer.
             updateTimer();
             createServiceHandler();
         }
