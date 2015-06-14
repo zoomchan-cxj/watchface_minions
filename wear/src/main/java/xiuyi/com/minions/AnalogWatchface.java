@@ -57,6 +57,9 @@ public class AnalogWatchface extends CanvasWatchFaceService implements MessageAp
     private String temperature_type;
     private SettingStatus settingStatus;
     private SettingMonitor.SettingMonitorCallback settingCallback;
+
+    float scaleIndex;
+
     public AnalogWatchface() {
     }
 
@@ -186,7 +189,7 @@ public class AnalogWatchface extends CanvasWatchFaceService implements MessageAp
         int arrayIndex = 0;
         private int mIndex;
 
-        Matrix secondMatrix;
+
         Matrix minuteMatrix;
         Matrix hourMatrix;
 
@@ -211,6 +214,18 @@ public class AnalogWatchface extends CanvasWatchFaceService implements MessageAp
 
             GATimer();
 
+            background = bitMap.transform(R.mipmap.background_analog);
+            ambientMap = bitMap.transform(R.mipmap.ambient_background);
+
+
+            scaleIndex = (float) (background.getWidth()/320.0);
+            if(scaleIndex != 1.0){
+                scaleIndex = 1;
+            }else{
+                scaleIndex = (float) (mDM.widthPixels/320.0);
+            }
+
+
 
             eye1 = bitMap.transform(R.mipmap.eye1);
             eye2 = bitMap.transform(R.mipmap.eye2);
@@ -219,6 +234,10 @@ public class AnalogWatchface extends CanvasWatchFaceService implements MessageAp
 
             minuteMap = bitMap.transform(R.mipmap.minute);
             hourMap = bitMap.transform(R.mipmap.hour);
+
+            minuteMap = Bitmap.createScaledBitmap(minuteMap, (int) (minuteMap.getWidth() * scaleIndex), (int) (minuteMap.getHeight() * scaleIndex), true);
+            hourMap = Bitmap.createScaledBitmap(hourMap,(int)(hourMap.getWidth()*scaleIndex),(int)(hourMap.getHeight()*scaleIndex),true);
+
             minuteMatrix = new Matrix();
             hourMatrix = new Matrix();
 
@@ -227,8 +246,9 @@ public class AnalogWatchface extends CanvasWatchFaceService implements MessageAp
             bitmapArray[2] = eye3;
             bitmapArray[3] = eye4;
 
-            background = bitMap.transform(R.mipmap.background_analog);
-            ambientMap = bitMap.transform(R.mipmap.ambient_background);
+
+
+
 
             batteryMatrix = new Matrix();
 
@@ -276,12 +296,13 @@ public class AnalogWatchface extends CanvasWatchFaceService implements MessageAp
                 centerY = 160;
             }
 
+
             float heightRatio = (float) (mDM.heightPixels/320.0);
             float widthRatio = (float) (mDM.widthPixels/320.0);
 
             canvas.drawRect(bounds, mBgPaint);
             secondRadius = mTime.second*6;
-            minuteRadius = mTime.minute*6;
+            minuteRadius = mTime.minute * 6;
             hourRadius = (float) (mTime.hour*30+mTime.minute*0.5);
             minuteMatrix.setRotate(minuteRadius, minuteMap.getWidth()/2, minuteMap.getHeight());
             hourMatrix.setRotate(hourRadius, hourMap.getWidth()/2, hourMap.getHeight());
